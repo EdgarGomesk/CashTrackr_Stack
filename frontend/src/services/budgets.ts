@@ -21,5 +21,5 @@ export const getBudget = cache (async (budgetId: string) => {
 
     const budget = BudgetAPIResponseSchema.parse(json)
 
-    return json
+    return budget
 })

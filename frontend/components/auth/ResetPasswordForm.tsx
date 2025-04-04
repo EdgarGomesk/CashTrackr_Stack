@@ -40,7 +40,7 @@ export default function ResetPasswordForm({token}: {token: string}) {
         <div className="flex flex-col gap-5">
           <label
             className="font-bold text-2xl"
-          >Password</label>
+          >Contraseña</label>
   
           <input
             type="password"

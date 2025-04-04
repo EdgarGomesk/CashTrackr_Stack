@@ -30,7 +30,7 @@ export default function LoginPage() {
                     href='/auth/forgot-password'
                     className='text-center text-grey-500'
                 >
-                    ¿Olvidaste tu contraseña? Recuperala aquí
+                    ¿Olvidaste tu contraseña? Reestablecela aquí
                 </Link>
             </nav>
         </>
