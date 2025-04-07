@@ -20,20 +20,20 @@ export class AuthController {
             const error = new Error('El usuario ya existe')
             res.status(409).json({ error: error.message })
             return
-        } 
+        }
         try {
             const user = await User.create(req.body)
 
             user.password = await hashPasword(password)
-            
+
             const token = generateToken();
             user.token = token;
 
-            if(process.env.NODE_ENV !== 'production') {
+            if (process.env.NODE_ENV !== 'production') {
                 globalThis.cashTrackrConfirmationToken = token
             }
 
-           
+
             await user.save()
             await AuthEmail.sendConfirmationEmail({
                 name: user.name,
@@ -50,7 +50,7 @@ export class AuthController {
     static confirmAccount = async (req: Request, res: Response) => {
         const { token } = req.body
 
-        const user = await User.findOne( { where: { token } } )
+        const user = await User.findOne({ where: { token } })
 
         if (!user) {
             const error = new Error('Token no valido')
@@ -157,14 +157,14 @@ export class AuthController {
     }
 
     static updateCurremtUserPassword = async (req: Request, res: Response) => {
-        
+
         const { password, current_password } = req.body
         const { id } = req.user
         const user = await User.findByPk(id)
 
         const isPasswordCorrect = checkPassword(current_password, user.password)
 
-        if(!isPasswordCorrect) {
+        if (!isPasswordCorrect) {
             const error = new Error('El password no es correcto')
             res.status(404).json({ error: error.message })
             return
@@ -188,5 +188,28 @@ export class AuthController {
             return
         }
         res.json('Contraseña Correcta')
+    }
+
+    static updateUser = async (req: Request, res: Response) => {
+        const { name, email } = req.body
+        const { id } = req.user
+        try {
+            const existingUser = await User.findOne({ where: { email } })
+            
+            if (existingUser && existingUser.id !== id) {
+                const error = new Error('Ese email ya esta registrado por otro usuario')
+                res.status(409).json({ error: error.message })
+                return
+            }
+
+            await User.update({ email, name }, {
+                where: { id }
+            })
+
+            res.json('Perfil Actualizado Correctamente')
+
+        } catch (error) {
+            res.status(500).json('Hubo un error')
+        }
     }
 }

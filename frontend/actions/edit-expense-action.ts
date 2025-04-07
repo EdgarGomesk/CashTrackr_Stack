@@ -14,7 +14,7 @@ type ActionStateType = {
     success: string
 }
 
-export default async function editExpense({budgetId, expenseId} : BudgetAndExpenseId,prevState: ActionStateType ,  formData: FormData) {
+export default async function editExpense({budgetId, expenseId} : BudgetAndExpenseId, prevState: ActionStateType ,  formData: FormData) {
     
     
     const expense = DraftExpenseSchema.safeParse({
